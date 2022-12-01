@@ -1,0 +1,34 @@
+specVersion: "2.5"
+metadata:
+  name: feedbackapp.feedbackapp
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+        backend:
+          - scp: true
+            path: /sap
+            url: https://c7b3a05b-976a-4b45-9de7-0b006e8e7ced.abap.us10.hana.ondemand.com
+            destination: abap-cloud-abap-env-instance-grow-think180-pty-ltd_t180-cf-4zbut8mq-dev
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: webapp
+        delay: 300
+    - name: sap-fe-mockserver
+      beforeMiddleware: csp
+      configuration:
+        service:
+          - urlPath: /sap/opu/odata/sap/ZFEEDBACKAPP_SB/
+            metadataXmlPath: ./webapp/localService/metadata.xml
+            mockdataRootPath: ./webapp/localService/mockdata
+            generateMockData: true

@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: feedbackapp-feedbackapp
+description: Think180 Feedback App
+version: 0.0.1
+modules:
+- name: feedbackapp-feedbackapp-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: feedbackapp-feedbackapp-destination-service
+    parameters:
+      content-target: true
+  - name: feedbackapp-feedbackapp-repo-host
+    parameters:
+      service-key:
+        name: feedbackapp-feedbackapp-repo-host-key
+  - name: feedbackapp-feedbackapp-uaa
+    parameters:
+      service-key:
+        name: feedbackapp-feedbackapp-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: feedbackapp-feedbackapp_html_repo_host
+          ServiceInstanceName: feedbackapp-feedbackapp-html5-srv
+          ServiceKeyName: feedbackapp-feedbackapp-repo-host-key
+          sap.cloud.service: feedbackapp-feedbackapp
+        - Authentication: OAuth2UserTokenExchange
+          Name: feedbackapp-feedbackapp_uaa
+          ServiceInstanceName: feedbackapp-feedbackapp-xsuaa-srv
+          ServiceKeyName: feedbackapp-feedbackapp-uaa-key
+          sap.cloud.service: feedbackapp-feedbackapp
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: feedbackapp-feedbackapp-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: feedbackapp-feedbackapp-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - feedbackappfeedbackapp.zip
+      name: feedbackappfeedbackapp
+      target-path: resources/
+- name: feedbackappfeedbackapp
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: feedbackapp-feedbackapp-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: feedbackapp-feedbackapp-destination-service
+    service-plan: lite
+- name: feedbackapp-feedbackapp-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: feedbackapp-feedbackapp-xsuaa-srv
+    service-plan: application
+- name: feedbackapp-feedbackapp-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: feedbackapp-feedbackapp-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
