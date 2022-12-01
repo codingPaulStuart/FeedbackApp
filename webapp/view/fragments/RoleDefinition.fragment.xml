@@ -1,0 +1,87 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:f="sap.ui.layout.form" xmlns:tnt="sap.tnt" height="100%">
+    <HBox width="100px" alignItems="Center" class="sapUiTinyMargin">
+        <Image src="https://i.imgur.com/ufHVjpF.png" width="75px"/>
+        <core:HTML/>
+        <Title text="{SettingsModel>/EmployeeName} ({FeedbackModel>/ReviewDetails/FeedbackID}) ({FeedbackModel>/ReviewDetails/RoleName})" class="sapUiSmallMarginBegin" titleStyle="H2"></Title>
+    </HBox>
+    <f:SimpleForm editable="true" class="editableForm" layout="ResponsiveLayout" width="95%" binding="{FeedbackModel>/ReviewDetails}">
+        <VBox>
+            <!-- Role Details -->
+            <Panel>
+                <HBox alignItems="Center">
+                    <HBox width="100%" justifyContent="End" alignItems="Center" class="sapUiSmallMarginTop">
+                        <HBox justifyContent="End" alignContent="End" width="100%">
+                            <core:Icon src="sap-icon://workflow-tasks" class="sapUiTinyMarginEnd" size="15px" color="#ef5e37"/>
+                            <Title text="{i18n>roleNameHeadfrag}" class="sapUiSmallMarginEnd " titleStyle="H5"/>
+                        </HBox>
+                        <!-- ComboBox Control for Role Definitions and Custom Role if Admin -->
+                        <ComboBox enabled="{= (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" showSecondaryValues="true" width="700px" placeholder="{i18n>comboBoxPlace}" items="{path: 'FeedbackModel>/Roles', sorter: {path: 'name'} }" editable="{= (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending') ? true : false}" change="onSelectEmployeeRole" class="sapUiTinyMarginEnd" showValueStateMessage="true" value="{FeedbackModel>/ReviewDetails/RoleName}">
+                            <core:ListItem text="{FeedbackModel>name}" additionalText="{FeedbackModel>id}"/>
+                        </ComboBox>
+
+                    </HBox>
+                </HBox>
+            </Panel>
+            <Panel>
+                <VBox>
+                    <!-- Intuition -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>Intuition}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleIntuition}"/>
+                    </HBox>
+                    <!-- Documentation -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>Documentation}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleDocumentation}"/>
+                    </HBox>
+                    <!-- Communication -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>Communication}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleCommunication}"/>
+                    </HBox>
+                    <!-- BusinessKnowledge -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>BusinessKnowledge}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleBusinessKnowledge}"/>
+                    </HBox>
+                    <!-- StakeholderMGMT -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>StakeholderMGMT}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleStakeholderMGMT}"/>
+                    </HBox>
+                    <!-- UserRequirements -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>UserRequirements}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleUserRequirements}"/>
+                    </HBox>
+                    <!-- Facilitation -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>Facilitation}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleFacilitation}"/>
+                    </HBox>
+                    <!-- SolutionDesign -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>SolutionDesign}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleSolutionDesign}"/>
+                    </HBox>
+                    <!-- Visibility -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>Visibility}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleVisibility}"/>
+                    </HBox>
+                    <!-- TechnicalSkills -->
+                    <HBox alignItems="Center" justifyContent="End">
+                        <Title text="{i18n>TechnicalSkills}" class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                        <TextArea growing="true" wrapping="Hard" valueLiveUpdate="true" width="900px" height="30px" liveChange="onRoleDefinitionChange" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" value="{FeedbackModel>/ReviewDetails/RoleTechnicalSkills}"/>
+                    </HBox>
+                </VBox>
+                <HBox justifyContent="End" class="sapUiMediumMarginBegin">
+                    <Button class="sapUiSmallMarginBegin" width="190px" press="resetRoleDef" type="Neutral" text="{i18n>clearFiledsRolefrag}" icon="sap-icon://restart" enabled="{= (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending') ? true : false}"/>
+                </HBox>
+            </Panel>
+            <HBox justifyContent="Center" class="sapUiMediumMarginBegin">
+                <Button class="sapUiSmallMarginBegin" width="200px" press="onRoleSave" type="Success" text="{i18n>saveFeedbackBTNTxt}" icon="sap-icon://employee-pane" enabled="{= (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending') ? true : false}"/>
+            </HBox>
+        </VBox>
+    </f:SimpleForm>
+</core:FragmentDefinition>

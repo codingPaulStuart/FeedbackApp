@@ -1,0 +1,158 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:viz="sap.viz.ui5.controls" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:chart="sap.suite.ui.commons" xmlns:tnt="sap.tnt"
+	xmlns:viz.data="sap.viz.ui5.data">
+	<!-- Top Panel Header -->
+	<Panel backgroundDesign="Solid">
+		<HBox>
+			<Image src="https://i.imgur.com/gWFWcla.png" width="300px" class="SapUiLargeMarginTop"/>
+			<VBox class="sapUiMediumMarginBegin ">
+				<Title titleStyle="H3" text="{i18n>graphEmpHead} {SettingsModel>/EmployeeName} ({FeedbackModel>/ReviewDetails/FeedbackID})"/>
+				<Title titleStyle="H6" text="{i18n>graphRoleHead} {SettingsModel>/RoleName}"/>
+				<Title visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} !== 'Feedback' ? true : false}"
+					titleStyle="H6" text="{i18n>ReviewedBy} {SettingsModel>//ReviewerName}"/>
+			</VBox>
+			<VBox class="sapUiMediumMarginBegin " width="auto">
+				<Title titleStyle="H3" text="{i18n>EntryReason}"></Title>
+				<TextArea editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}"
+					width="auto" value="{FeedbackModel>Description}"/>
+			</VBox>
+		</HBox>
+	</Panel>
+	<HBox alignItems="Center" justifyContent="Center">
+		<!-- Left Hand VBox Panel -->
+		<Panel width="850px" height="600px" class="sapUiTinyMargin">
+			<chart:ChartContainer autoAdjustHeight="true" title="{i18n>Feedback}" enableScroll="true">
+				<chart:ChartContainerContent icon="sap-icon://radar-chart">
+					<chart:content>
+						<viz:VizFrame id="viz" uiConfig="{applicationSet:'fiori'}" vizType='radar' vizProperties="{vizFrameModel>/properties}"></viz:VizFrame>
+					</chart:content>
+				</chart:ChartContainerContent>
+			</chart:ChartContainer>
+		</Panel>
+		<!-- Right Hand VBox Panel -->
+		<VBox width="60%" class="sapMFlexBoxJustifyCenter sapUiLargeMarginEnd">
+			<!-- Header 'Averages' -->
+			<tnt:InfoLabel text="{i18n>averageHead}" colorScheme="1" icon="sap-icon://chart-axis" width="100%"/>
+			<!-- Intuition -->
+			<HBox class="sapUiTinyMarginTopBottom">
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>Intuition}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/Intuition} > ${FeedbackModel>/PreviousFeedbackSummary/Intuition} ? 'Up' : ${FeedbackModel>/ReviewDetails/Intuition} &lt; ${FeedbackModel>/PreviousFeedbackSummary/Intuition} ? 'Down' : 'None'}"
+							scale="" value="{FeedbackModel>/ReviewDetails/Intuition}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/Intuition} >= 3 ? 'Good': ${FeedbackModel>/ReviewDetails/Intuition} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://puzzle" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+				<!-- Documentation -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>Documentation}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/Documentation} > ${FeedbackModel>/PreviousFeedbackSummary/Documentation} ? 'Up' : ${FeedbackModel>/ReviewDetails/Documentation} &lt; ${FeedbackModel>/PreviousFeedbackSummary/Documentation} ? 'Down' : 'None'}"
+							scale="" value="{FeedbackModel>/ReviewDetails/Documentation}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/Documentation} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/Documentation} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://document-text" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+			</HBox>
+			<HBox class="sapUiTinyMarginTopBottom">
+				<!-- Communication -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>Communication}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/Communication} > ${FeedbackModel>/PreviousFeedbackSummary/Communication} ? 'Up' : ${FeedbackModel>/ReviewDetails/Communication} &lt; ${FeedbackModel>/PreviousFeedbackSummary/Communication} ? 'Down' : 'None'}"
+							scale="" value="{FeedbackModel>/ReviewDetails/Communication}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/Communication} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/Communication} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://citizen-connect" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+				<!-- Business knowledge -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>BusinessKnowledge}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/BusinessKnowledge} > ${FeedbackModel>/PreviousFeedbackSummary/BusinessKnowledge} ? 'Up' : ${FeedbackModel>/ReviewDetails/BusinessKnowledge} &lt; ${FeedbackModel>/PreviousFeedbackSummary/BusinessKnowledge} ? 'Down' : 'None'}"
+							scale="" value="{FeedbackModel>/ReviewDetails/BusinessKnowledge}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/BusinessKnowledge} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/BusinessKnowledge} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://document-text" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+			</HBox>
+			<HBox binding="{FeedbackModel>/ReviewDetails}" class="sapUiTinyMarginTopBottom">
+				<!-- Stakeholder Mgmt -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>StakeholderMGMT}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/StakeholderMGMT} > ${FeedbackModel>/PreviousFeedbackSummary/StakeholderMGMT} ? 'Up' : ${FeedbackModel>/ReviewDetails/StakeholderMGMT} &lt; ${FeedbackModel>/PreviousFeedbackSummary/StakeholderMGMT} ? 'Down' : 'None'}"
+							value="{FeedbackModel>/ReviewDetails/StakeholderMGMT}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/StakeholderMGMT} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/StakeholderMGMT} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://meeting-room" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+				<!-- User Requirements -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>UserRequirements}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/UserRequirements} > ${FeedbackModel>/PreviousFeedbackSummary/UserRequirements} ? 'Up' : ${FeedbackModel>/ReviewDetails/UserRequirements} &lt; ${FeedbackModel>/PreviousFeedbackSummary/UserRequirements} ? 'Down' : 'None'}"
+							value="{FeedbackModel>/ReviewDetails/UserRequirements}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/UserRequirements} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/UserRequirements} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://my-view" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+			</HBox>
+			<HBox class="sapUiTinyMarginTopBottom">
+				<!-- Facilitation -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>Facilitation}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/Facilitation} > ${FeedbackModel>/PreviousFeedbackSummary/Facilitation} ? 'Up' : ${FeedbackModel>/ReviewDetails/Facilitation} &lt; ${FeedbackModel>/PreviousFeedbackSummary/Facilitation} ? 'Down' : 'None'}"
+							value="{FeedbackModel>/ReviewDetails/Facilitation}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/Facilitation} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/Facilitation} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://idea-wall" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+				<!-- Solution Design -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>SolutionDesign}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/SolutionDesign} > ${FeedbackModel>/PreviousFeedbackSummary/SolutionDesign} ? 'Up' : ${FeedbackModel>/ReviewDetails/SolutionDesign} &lt; ${FeedbackModel>/PreviousFeedbackSummary/SolutionDesign} ? 'Down' : 'None'}"
+							value="{FeedbackModel>/ReviewDetails/SolutionDesign}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/SolutionDesign} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/SolutionDesign} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://popup-window" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+			</HBox>
+			<HBox binding="{FeedbackModel>/ReviewDetails}" class="sapUiTinyMarginTopBottom">
+				<!-- Visibility/Perform Under Pressure -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>Visibility}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/Visibility} > ${FeedbackModel>/PreviousFeedbackSummary/Visibility} ? 'Up' : ${FeedbackModel>/ReviewDetails/Visibility} &lt; ${FeedbackModel>/PreviousFeedbackSummary/Visibility} ? 'Down' : 'None'}"
+							value="{FeedbackModel>/ReviewDetails/Visibility}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/Visibility} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/Visibility} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://show" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+				<!-- Technical Skills -->
+				<GenericTile class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop tileLayout" header="{i18n>TechnicalSkills}" press=".onTilePress"
+					frameType="OneByHalf">
+					<TileContent>
+						<NumericContent
+							indicator="{=${FeedbackModel>/ReviewDetails/TechnicalSkills} > ${FeedbackModel>/PreviousFeedbackSummary/TechnicalSkills} ? 'Up' : ${FeedbackModel>/ReviewDetails/TechnicalSkills} &lt; ${FeedbackModel>/PreviousFeedbackSummary/TechnicalSkills} ? 'Down' : 'None'}"
+							value="{FeedbackModel>/ReviewDetails/TechnicalSkills}"
+							valueColor="{=${FeedbackModel>/ReviewDetails/TechnicalSkills} >= 3 ? 'Good':${FeedbackModel>/ReviewDetails/TechnicalSkills} === 2 ? 'Critical' : 'Error'}"
+							icon="sap-icon://syntax" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+			</HBox>
+		</VBox>
+	</HBox>
+</core:FragmentDefinition>

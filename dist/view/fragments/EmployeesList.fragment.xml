@@ -1,0 +1,62 @@
+<!-- ************************************ Employee List View for PD Plans ************************************ -->
+<core:FragmentDefinition xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core" displayBlock="true" height="100%">
+    <Table
+inset = "false" showSeparators = "Inner" items = "{EmployeeNamesModel>/Employee}" >
+
+        <!-- ************************************ Cell Row Headers ************************************* -->
+        <columns>
+            <!-- Employee ID Head -->
+            <Column width="240px">
+                <HBox justifyContent="Start">
+                    <Text text="{i18n>staffIDtabHead}"/>
+                    <core:Icon src = "sap-icon://email" color = "#ef5e37" class = "sapUiTinyMarginBegin" />
+                </HBox>
+            </Column>
+
+            <!-- Employee Name Head -->
+            <Column width="180px">
+                <HBox justifyContent="Start">
+                    <Text text="{i18n>staffNameTabHead}"/>
+                    <core:Icon src="sap-icon://person-placeholder" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+                </HBox>
+            </Column>
+
+            <!-- Job Title Name Head -->
+            <Column width="180px">
+                <HBox justifyContent="Start">
+                    <Text text="{i18n>managerNameTabHead}"/>
+                    <core:Icon src = "sap-icon://employee" color = "#ef5e37" class = "sapUiTinyMarginBegin" />
+                </HBox>
+            </Column>
+
+        </columns>
+        <!-- ************************************ Cell Row Data ************************************ -->
+        <items>
+            <ColumnListItem
+                visible="true" type="Navigation" press="onSelectEmployee">
+                <!-- Employee ID Cells -->
+                <cells>
+                    <HBox justifyContent="Start">
+                    <core:Icon src= "sap-icon://customer-and-contacts" color = "#0654a0" class = "sapUiTinyMarginEnd" />
+                        <Text text = "{EmployeeNamesModel>Mail}" > </Text>
+                    </HBox>
+                </cells>
+
+                <!-- Employee Name Cells -->
+                <cells>
+                    <HBox justifyContent="Start">
+                    <Text text = "{EmployeeNamesModel>Displayname}" > </Text>
+                    </HBox>
+                </cells>
+
+                <!-- Job Title Cells -->
+                <cells>
+                    <HBox justifyContent="Start">
+                    <Text text = "{EmployeeNamesModel>Jobtitle}" > </Text>
+                    </HBox>
+                </cells>
+
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

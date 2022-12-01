@@ -1,0 +1,172 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core" displayBlock="true" height="100%">
+    <Table inset="false" showSeparators="Inner" id="feedbackColumnsID" headerText="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? ${i18n>FeedbackReports} : ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? ${i18n>CurrentReviewsReceived} : ${i18n>PerformanceDevelopmentPlans} }" items="{FeedbackModel>/ReviewList}">
+        <columns>
+            <!-- Feedback ID -->
+            <Column visible="{=${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems' }" width="80px" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                <HBox justifyContent="Center">
+                    <Text tooltip="{i18n>IDTooltip}" text="{i18n>FeedbackID}"/>
+                </HBox>
+            </Column>
+            <!-- Review ID -->
+            <Column visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems' ? true : false }" width="60px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text tooltip="{i18n>IDTooltip}" text="{i18n>ReviewID}"/>
+                </HBox>
+            </Column>
+            <!-- Date Submitted -->
+            <!-- Always Shown -->
+            <Column visible="{=${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems'}" width="90px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="{i18n>ReviewsDateSubmitted}"/>
+                    <core:Icon src="sap-icon://appointment" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!-- Date Created -->
+            <Column visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems' ? true : false }" width="85px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="{i18n>DateCreated}"/>
+                    <core:Icon src="sap-icon://appointment-2" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!--Review Status -->
+            <Column visible="{=${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems'}" width="95px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text tooltip="{i18n>ReviewStatusTooltip}" text="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? ${i18n>FeedbackStatus} : ${i18n>ReviewStatus} }"/>
+                    <core:Icon src="sap-icon://in-progress" tooltip="{i18n>ReviewStatusOptionsTooltip}" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!-- Due Date -->
+            <Column visible="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; (${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' || ${SettingsModel>/ReviewsListSelectedKey} === 'PDdevItems')) || (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ) ? true : false}" width="95px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="{i18n>DueDate}"/>
+                    <core:Icon src="sap-icon://appointment" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!-- Employee Name -->
+            <!--Only shown to admins and only on reviews receieved and reviews to do-->
+            <Column visible="{= ${SettingsModel>/ReviewsListSelectedKey} !== 'Feedback' || ${SettingsModel>/UserRole} === 'Admin' ? true : false}" width="135px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="{=${SettingsModel>/ReviewsListSelectedKey} === 'PDdevItems' ? ${i18n>Employee} : ${SettingsModel>/UserRole} !== 'Admin' ? ${i18n>Reviewing} : ${i18n>EmployeeName} }"/>
+                    <core:Icon src="sap-icon://citizen-connect" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!-- Assigned Reviewer -->
+            <!--Only shown to admins and only on reviews receieved and reviews to do-->
+            <Column visible="{= ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; (${SettingsModel>/ReviewsListSelectedKey} === 'Reviews') ? true : false}" width="135px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="{i18n>AssignedReviewer}"/>
+                    <core:Icon src="sap-icon://collaborate" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!-- Remove Item from List -->
+            <Column visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems' ? true : false}" hAlign="Center" width="40px">
+                    <core:Icon src="sap-icon://save" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+            </Column>
+            <!-- Grow -> Most Recent Review -->
+            <Column visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'PDdevItems' ? true : false }" width="95px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="Most Recent Review"/>
+                    <core:Icon src="sap-icon://appointment" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+            <!-- Grow -> Upcoming Review -->
+            <Column visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'PDdevItems' ? true : false }" width="95px" minScreenWidth="Tablet" demandPopin="true">
+                <HBox justifyContent="Center">
+                    <Text text="Upcoming Review"/>
+                    <core:Icon src="sap-icon://appointment" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                </HBox>
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem
+                visible="true" type="Navigation" press=".onReviewListItemSelected">
+                <!--Feedback ID -->
+                <cells>
+                    <HBox justifyContent="Center">
+                        <Text visible="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews') || ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' || ${FeedbackModel>ReviewState} === 'Completed' ? true : false }" text="{FeedbackModel>FeedbackID}"></Text>
+                        <!-- Shown under Admin/Feedback Tab only, Dropdown list to choose the FB to assign the review under -->
+                        <ComboBox items="{ path: 'SettingsModel>/EmployeeFilteredSelectList', templateShareable:false }" width="110px" selectionChange="onNameOrDateChange" selectedKey="{FeedbackModel>FeedbackID}" visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true: false}">
+                            <core:Item key="{SettingsModel>FeedbackID}" text="{SettingsModel>FeedbackID}"/>
+                        </ComboBox>
+                    </HBox>
+                </cells>
+                <!--Review ID -->
+                <cells>
+                    <HBox justifyContent="Center">
+                        <Text text="{FeedbackModel>ReviewID}"></Text>
+                    </HBox>
+                </cells>
+                <!--Date Submitted -->
+                <cells>
+                    <HBox>
+                        <Text text="{ path: 'FeedbackModel>DateSubmitted', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"></Text>
+                    </HBox>
+                </cells>
+                <!--Date Created -->
+                <cells>
+                    <HBox>
+                        <!--Visible and Uneditable for Everyone -->
+                        <Text text="{ path: 'FeedbackModel>DateCreated', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"/>
+                    </HBox>
+                </cells>
+                <!--Review Status -->
+                <cells>
+                    <HBox>
+                        <!-- Visible to Everyone -->
+                        <Text visible="true" text="{=${FeedbackModel>ReviewState} === 'Completed' ? ${i18n>Completed} : (${FeedbackModel>ReviewState} === 'Completed') ? ${i18n>Completed} :${FeedbackModel>ReviewState} === 'Pending' ? ${i18n>Pending} : ${i18n>Archived} }"></Text>
+                        <core:Icon tooltip="{=(${FeedbackModel>ReviewState} === 'Completed' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback') ? ${i18n>Accepted} : (${FeedbackModel>ReviewState} === 'Completed') ? ${i18n>Completed} : ${FeedbackModel>ReviewState} === 'Pending' ? ${i18n>Pending} : ${i18n>Archived} }" visible="true" src="{=${FeedbackModel>ReviewState} === 'Completed' ? 'sap-icon://complete' : ${FeedbackModel>ReviewState} === 'Pending' ? 'sap-icon://pending' : 'sap-icon://flag'}" class="sapUiTinyMarginBegin" color="{= ${FeedbackModel>ReviewState} === 'Completed' ? '#47d147' : ${FeedbackModel>ReviewState} === 'Pending' ? '#9d9d9d' : '#b90c0d'}"/>
+                    </HBox>
+                </cells>
+                <!--Due Date -->
+                <cells>
+                    <HBox>
+                        <!-- Display text when User OR (Admin AND (review approved OR review${i18n>Completed} -->
+                        <Text visible="{=(${FeedbackModel>ReviewState} !== 'Pending' || (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending')) ? true : false }" text="{ path: 'FeedbackModel>DateDue', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"></Text>
+                        <!--Selectable when Admin AND NOT approved by admin OR${i18n>Completed}-->
+                        <DatePicker required="true" placeholder="select a date" change=".onNameOrDateChange" visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending' ? true: false}" width="100px" displayFormat="short" valueFormat="yyyyMMdd" value="{ path: 'FeedbackModel>DateDue', formatOptions: { pattern: 'yyyyMMdd' } }"></DatePicker>
+                    </HBox>
+                </cells>
+                <!--Employee Name -->
+                <cells>
+                    <HBox>
+                        <Select 
+                            width="150px" 
+                            change=".onNameOrDateChange" 
+                            enabled="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending' ? true : false}" 
+                            selectedKey="{FeedbackModel>EmployeeName}" 
+                            items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                            <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                        </Select>
+                    </HBox>
+                </cells>
+                <!-- Reviewer Name -->
+                <cells>
+                    <HBox>
+                        <!-- Display Text when (User) OR (review has been${i18n>Completed}OR approved by Admin) AND Admin)
+                        <Text
+                         visible="{=(${FeedbackModel>ReviewState} !== 'Pending' || (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending')) ? true : false }"
+                                                							text="{FeedbackModel>ReviewerName}"></Text>-->
+                        <!-- Display Dropdown when: Admin AND (review NOT Approved && review NOT${i18n>Completed}-->
+                            <Select 
+                            width="150px" 
+                            enabled="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending' ? true: false}" 
+                            selectedKey="{FeedbackModel>ReviewerName}" 
+                            change=".onNameOrDateChange" 
+                            autoAdjustWidth="true" 
+                            items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                            <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                        </Select>
+                    </HBox>
+                </cells>
+                <!-- Remove Item from List, Call on Click Event -->
+                <cells>
+                    <HBox justifyContent="Center">
+                        <Button icon="sap-icon://folder-2" type="Reject" enabled="{= ${SettingsModel>/UserRole} === 'Admin'}" press="onListDeleteOptions"/>
+                    </HBox>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+    <!-- Only Visible when Admin HERE || &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' &amp;&amp; ${FeedbackModel>/Feedback}.length >= 1 )-->
+    <Button visible="{= (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} !== 'PDdevItems') ? true : false}" type="Emphasized" text="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? ${i18n>CreateNewFeedbackSummary} : ${i18n>AssignNewReview}}" class="sapUiTinyMargin" icon="sap-icon://create-form" press=".onReviewAssignment"/>
+</core:FragmentDefinition>

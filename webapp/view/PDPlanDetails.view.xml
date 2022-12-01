@@ -1,0 +1,152 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:grid="sap.ui.layout.cssgrid" xmlns:f="sap.f" xmlns:l="sap.ui.layout" controllerName="feedbackapp.feedbackapp.controller.PDPlanDetails" xmlns:html="http://www.w3.org/1999/xhtml">
+    <App>
+        <pages>
+            <Page id="PDPlanDetailsID" enableScrolling="true" title="Think180 Internal Feedback App: Grow Conversations" showNavButton="true" navButtonPress="onBack">
+                <content>
+                    <!-- T180 Header Start -->
+                    <HBox backgroundDesign="Solid">
+                        <HBox class="sapUiSmallMargin" alignItems="Center">
+                            <Image
+                            src="https://i.imgur.com/gWFWcla.png" width="300px" class="SapUiLargeMarginTop"/>
+                            <!-- Employee Name and Last update Date Display -->
+                            <HBox class="sapUiMediumMarginBegin">
+                                <HBox class="sapUiTinyMarginTop sapUiLargeMarginBegin" alignItems="Center">
+                                    <core:Icon src="sap-icon://employee-pane" color="#0654a0" size="40px" class="sapUiTinyMarginBegin"/>
+                                    <Title titleStyle="H2" class="sapUiSmallMargin" text="{SettingsModel>/EmployeeName}"/>
+                                </HBox>
+                                <HBox class="sapUiTinyMarginTop sapUiLargeMarginBegin" alignItems="Center">
+                                    <core:Icon src="sap-icon://work-history" color="#0654a0" size="40px" class="sapUiTinyMarginBegin"/>
+                                    <Title titleStyle="H2" class="sapUiSmallMargin" text="{SettingsModel>/RoleName}"/>
+                                </HBox>
+                            </HBox>
+                        </HBox>
+                    </HBox>
+                    <!-- T180 Header End -->
+                    <!--Archived PDPlans Start -->
+                    <Panel expandable="true" expanded="true" headerText="{i18n>PerformanceDevelopmentPlans}">
+                        <VBox>
+                            <core:Fragment type="XML" fragmentName="feedbackapp.feedbackapp.view.fragments.PDList"/>
+                        </VBox>
+                    </Panel>
+                    <!--Archived PDPlands End -->
+                    <!-- Current PDPlan Start -->
+                    <Panel binding="{PDPlanModel>/CurrentPDPlan}" expandable="true" expanded="false" headerText="{i18n>PDPTitle}">
+                        <VBox>
+                            <Panel>
+                                <VBox>
+                                    <!--Employee/Manager Names START-->
+                                    <HBox alignItems="Center" justifyContent="Start">
+                                        <Title text="Employee Name: " class="sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                                        <Select class="sapUiTinyMarginBegin" width="400px" selectedKey="{PDPlanModel>EmployeeName}" items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                                            <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                                        </Select>
+                                        <Title text="Manager Name: " class="sapUiLargeMarginBegin" wrapping="false" titleStyle="H5"/>
+                                        <Select class="sapUiTinyMarginBegin" width="400px" selectedKey="{PDPlanModel>ManagerName}" items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                                            <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                                        </Select>
+                                    </HBox>
+                                    <!--Employee/Manager Names END -->
+                                    <!-- Dates -->
+                                    <HBox alignItems="Center" justifyContent="Start">
+                                        <Title text="{i18n>DatePlanAgreed}" class="sapUiTinyMarginBegin sapUiMediumMarginTop sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                                        <DatePicker class="sapUiTinyMarginBegin sapUiMediumMarginTop sapUiMediumMarginEnd" required="true" placeholder="select a date" width="200px" displayFormat="short" valueFormat="yyyyMMdd" value="{ path: 'PDPlanModel>/CurrentPDPlan/DateAgreed', formatOptions: { pattern: 'yyyyMMdd' } }"></DatePicker>
+                                        <Title text="{i18n>3MonthReview}" class="sapUiTinyMarginBegin sapUiMediumMarginTop sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                                        <DatePicker class="sapUiTinyMarginBegin sapUiMediumMarginTop sapUiMediumMarginEnd" required="true" placeholder="select a date" width="200px" displayFormat="short" valueFormat="yyyyMMdd" value="{ path: 'PDPlanModel>/CurrentPDPlan/DateShortTerm', formatOptions: { pattern: 'yyyyMMdd' } }"></DatePicker>
+                                        <Title text="{i18n>12MonthReview}" class="sapUiTinyMarginBegin sapUiMediumMarginTop sapUiTinyMarginEnd" wrapping="false" titleStyle="H5"/>
+                                        <DatePicker class="sapUiTinyMarginBegin sapUiMediumMarginTop sapUiMediumMarginEnd" required="true" placeholder="select a date" width="200px" displayFormat="short" valueFormat="yyyyMMdd" value="{ path: 'PDPlanModel>/CurrentPDPlan/DateLongTerm', formatOptions: { pattern: 'yyyyMMdd' } }"></DatePicker>
+                                    </HBox>
+                                    <!-- Dates End -->
+                                </VBox>
+                            </Panel>
+                        </VBox>
+                        <!-- Main Strengths Text Box and Heading -->
+                        <VBox class="sapUiMediumMargin">
+                            <HBox alignItems="Center">
+                                <Avatar class="sapUiSmallMarginEnd sapUiSmallMarginBottom" src="sap-icon://employee-pane" displaySize="XS" backgroundColor="Accent5"/>
+                                <Title titleStyle="H2" text="{i18n>MainStrengths}"/>
+                            </HBox>
+                            <Label text="{i18n>StrengthExamples}"></Label>
+                            <TextArea width="100%" height="100px" editable="true" value="{PDPlanModel>MainStrength}"></TextArea>
+                            <!-- Current Goals Head -->
+                            <HBox class="sapUiSmallMarginTop" alignItems="Center">
+                                <Avatar class="sapUiSmallMarginEnd sapUiSmallMarginBottom" src="sap-icon://target-group" displaySize="XS" backgroundColor="Accent5"/>
+                                <Title titleStyle="H2" text="{i18n>Goals}"/>
+                            </HBox>
+                            <!--Development Items Start, Action Items Start (GridList) -->
+                            <Panel headerText="{=${SettingsModel>/ShowArchived} === false ? ${i18n>goalSetHEAD} : ${i18n>ArchivedGoals} }" expanded="false" expandable="true" expand="onExpandedPanel($event,'currentGoals')">
+                                <core:Fragment type="XML" fragmentName="feedbackapp.feedbackapp.view.fragments.GoalSetting"/>
+                            </Panel>
+                        </VBox>
+                        <!-- Notes Start -->
+                        <VBox class="sapUiMediumMarginBeginEnd">
+                            <HBox class="sapUiSmallMarginTop" alignItems="Center">
+                                <Avatar class="sapUiSmallMarginEnd sapUiSmallMarginBottom" src="sap-icon://discussion" displaySize="XS" backgroundColor="Accent5"/>
+                                <Title titleStyle="H2" text="{i18n>notesListHead}"/>
+                            </HBox>
+                            <Panel expanded="true" expandable="true">
+                                <List items="{PDPlanModel>/NotesList}">
+                                    <FeedListItem sender = "({PDPlanModel>ActionItem}) Note" icon = "sap-icon://thing-type" type = "Active" iconDensityAware = "false"
+                                    timestamp="{ path: 'PDPlanModel>NoteDate', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }" text="{PDPlanModel>Note}"
+                                    info="{PDPlanModel>EmployeeID}">
+                                    
+                                    </FeedListItem>
+                                </List>
+                            </Panel>
+                        </VBox>
+                        <!-- Notes End -->
+                        <!-- Comments Start -->
+                        <Panel>
+                            <VBox class="sapUiMediumMarginBeginEnd">
+                                <HBox class="sapUiTinyMarginTop" alignItems="Center">
+                                    <Avatar src="sap-icon://employee-pane" displaySize="XS" backgroundColor="Accent7"/>
+                                    <Title titleStyle="H5" class="sapUiSmallMargin" text="{i18n>empCommentHead}"/>
+                                </HBox>
+                                <TextArea value="{PDPlanModel>/CurrentPDPlan/EmployeeComment}" width="100%" wrapping="Hard" growing="true" placeholder="{i18n>empCommentPlace}"/>
+                                <HBox class="sapUiTinyMarginTop" alignItems="Center">
+                                    <Avatar src="sap-icon://manager" displaySize="XS" backgroundColor="Accent6"/>
+                                    <Title titleStyle="H5" class="sapUiSmallMargin" text="{i18n>manCommentHead}"/>
+                                </HBox>
+                                <TextArea value="{PDPlanModel>/CurrentPDPlan/ManagerComment}" width="100%" wrapping="Hard" growing="true" placeholder="{i18n>manCommentPlace}"/>
+                            </VBox>
+                        </Panel>
+                        <!-- Comments End -->
+                        <!-- Acknowledgements Start -->
+                        <Panel>
+                            <VBox
+                                class="sapUiMediumMarginBeginEnd">
+                                <!-- Manager E-Sign -->
+                                <HBox class="sapUiTinyMarginTopBottom">
+                                    <HBox  alignItems="Center" width="80%">
+                                        <Avatar src="sap-icon://thumb-up" displaySize="XS" backgroundColor="Accent8"/>
+                                        <Label class="sapUiSmallMarginBegin" text="Manager {PDPlanModel>/CurrentPDPlan/ManagerID} acknowledges that the annual review assessments are mutually agreed upon."/>
+                                    </HBox>
+                                    <HBox width="20%" alignItems="Center" justifyContent="End">
+                                        <CheckBox enabled="{=${SettingsModel>/UserRole} === 'Admin' ? true : false}" selected="{=${PDPlanModel>/CurrentPDPlan/ManagerAccept} === 'true' ? true : false}" select="onCheckBoxSelected($event, 'MANAGER')"/>
+                                        <Title titleStyle="H6" text="{ path: 'PDPlanModel>/CurrentPDPlan/ManagerAcceptDate', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyyMMdd' }, pattern: 'dd/MM/yyyy' } }"/>
+                                    </HBox>
+                                </HBox>
+                                <!-- Employee E-Sign -->
+                                <HBox class="sapUiTinyMarginTopBottom">
+                                    <HBox alignItems="Center" width="80%">
+                                        <Avatar src="sap-icon://alert" displaySize="XS" backgroundColor="Accent1"/>
+                                        <Label class="sapUiSmallMarginBegin" text="Staff Member {PDPlanModel>/CurrentPDPlan/EmployeeID} acknowledges that the annual review assessments are mutually agreed upon."/>
+                                    </HBox>
+                                    <HBox width="20%" alignItems="Center" justifyContent="End">
+                                        <CheckBox selected="{=${PDPlanModel>/CurrentPDPlan/EmployeeAccept} === 'true' ? true : false}" select="onCheckBoxSelected($event, 'EMPLOYEE')"/>
+                                        <Title titleStyle="H6" text="{ path: 'PDPlanModel>/CurrentPDPlan/EmployeeAcceptDate', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyyMMdd' }, pattern: 'dd/MM/yyyy' } }"/>
+                                    </HBox>
+                                </HBox>
+                            </VBox>
+                        </Panel>
+                        <!-- Acknoledgements End -->
+                        <!-- Update Performance Development Plan Button -->
+                        <HBox visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${PDPlanModel>/PDplansList}.length > 0 ? true : false}" justifyContent="Center" class="sapUiTinyMarginTop">
+                            <Button type="Success" text="{i18n>updatePDplanBTNTxt}" icon="sap-icon://synchronize" press="onUpdatePDplan"/>
+                        </HBox>
+                    </Panel>
+                    <!--Current PDPlan End -->
+                </content>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>

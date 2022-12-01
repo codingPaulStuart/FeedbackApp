@@ -1,0 +1,166 @@
+{
+    "_version": "1.37.0",
+    "sap.app": {
+        "id": "feedbackapp.feedbackapp",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.6.7",
+            "toolsId": "94dcc57b-74ac-498b-9ee8-7c3a69ec53ba"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "sap/opu/odata/sap/ZFEEDBACKAPP_SB/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "feedbackapp-feedbackapp-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "feedback-app",
+                    "action": "Display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.99.4",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "feedbackapp.feedbackapp.i18n.i18n"
+                }
+            },
+            "oDataFeedback": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {}
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "feedbackapp.feedbackapp.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "Main",
+                    "pattern": "Main",
+                    "target": [
+                        "Main"
+                    ]
+                },
+                {
+                    "pattern": "ReviewDetail",
+                    "name": "ReviewDetail",
+                    "target": [
+                        "ReviewDetail"
+                    ]
+                },
+                {
+                    "pattern": "PDPlanDetails",
+                    "name": "PDPlanDetails",
+                    "target": [
+                        "PDPlanDetails"
+                    ]
+                }
+            ],
+            "targets": {
+                "Main": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "view1",
+                    "viewName": "Main"
+                },
+                "ReviewDetail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "view2",
+                    "viewName": "ReviewDetail"
+                },
+                "PDPlanDetails": {
+                    "viewType": "XML",
+                    "viewName": "PDPlanDetails",
+                    "viewId": "view3"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "feedbackapp.feedbackapp.view.ReviewDetail",
+            "type": "XML",
+            "async": true,
+            "id": "root"
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "feedbackappfeedbackapp"
+    }
+}

@@ -1,0 +1,112 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:table="sap.ui.table" xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:grid="sap.ui.layout.cssgrid" displayBlock="true" height="100%" xmlns:chart="sap.suite.ui.commons" xmlns:u="sap.ui.unified">
+    <HBox
+        class="sapUiTinyMarginTop">
+        <!-- Goal Creation Button Start -->
+        <Button
+        type="Emphasized" text="{i18n>CreateNewGoal}" class="sapUiTinyMarginBegin" icon="sap-icon://add" press="onCreateDevItem($event,'PDdevItems')" enabled="{=${SettingsModel>/ShowArchived} === false ? true: false}" width="250px"/>
+        <!-- Toggle Switch Button Start -->
+        <ToggleButton visible="false" text="{=${SettingsModel>/ShowArchived} === false ? ${i18n>ShowArchived} : ${i18n>ShowCurrentGoals} }" enabled="true" icon="sap-icon://customer-history" class="sapUiTinyMarginBegin" pressed="true" press="onShowGoals" width="250px"/>
+    </HBox>
+    <!-- GenericTile Goals Cards, these will be dynamically created inside the GridList (Aggregation Bindings) -->
+    <VBox class="sapUiMediumMarginTop">
+        <f:GridList items="{PDPlanModel>/DevelopmentItemsList}">
+            <f:customLayout>
+                <grid:GridBoxLayout boxWidth="100%"/>
+            </f:customLayout>
+            <f:GridListItem highlight="{=${PDPlanModel>Status} === 'Archived' ? 'Error' : ${PDPlanModel>Status} === 'Completed' ? 'Success' : 'Information'}">
+                <VBox
+                    height="100%" class="sapUiSmallMargin">
+                    <!-- Top Row x 4 Elements ID, Date, Length-Type, Archive Button -->
+                    <Panel class="sapUiSmallMarginBottom">
+                        <HBox>
+                            <!-- Dev Item ID Header -->
+                            <HBox width="20%" class="sapUiTinyMarginTop sapUiTinyMarginBegin">
+                                <HBox justifyContent="Start" alignItems="Stretch" alignContent="Center">
+                                    <core:Icon src="sap-icon://tag" size="25px" color="#0654a0" class="sapUiTinyMarginEnd"/>
+                                    <Label text="{i18n>devItemIDpanelHead} {PDPlanModel>DevItemID}" wrapping="true" class="sapUiTinyMargin"/>
+                                </HBox>
+                            </HBox>
+                            <!-- Dev Item Length Type -->
+                            <HBox width="20%" justifyContent="Start" class="sapUiTinyMarginTop sapUiTinyMarginBegin">
+                                <HBox justifyContent="Start" alignItems="Stretch" alignContent="Center">
+                                    <core:Icon src="sap-icon://measure" size="25px" color="#0654a0" class="sapUiTinyMarginEnd"/>
+                                    <Label wrapping="true" text="{PDPlanModel>LengthType}" class="sapUiTinyMarginTop"></Label>
+                                </HBox>
+                            </HBox>
+                            <!-- Dev Item Date Start -->
+                            <HBox width="20%" visible="{=${SettingsModel>/ShowArchived} === false ? true : false}" justifyContent="Start" class="sapUiTinyMarginTop sapUiSmallMarginBegin">
+                                <HBox justifyContent="Start" alignItems="Stretch" alignContent="Center" class="sapUiLargeMarginEnd">
+                                    <core:Icon src="sap-icon://appointment" size="25px" color="#0654a0" class="sapUiTinyMarginEnd"/>
+                                    <Label class="sapUiTinyMarginTop" text="{ path: 'PDPlanModel>DateCreated', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyyMMdd' }, pattern: 'dd/MM/yyyy' } }"></Label>
+                                </HBox>
+                            </HBox>
+
+                            <!-- Archive Button 
+                            <HBox width="40%" visible="{=${SettingsModel>/ShowArchived} === false }" justifyContent="End">
+                                <HBox justifyContent="End" alignItems="Stretch" alignContent="Center" class="sapUiTinyMarginEnd">
+                                    <Button enabled="{=${PDPlanModel>Status} !== 'Archived' ? true : false}" type="Neutral" width="auto" text="{=${PDPlanModel>Status} === 'Archived' ? 'Already Archived' : 'Archive'}" press="onDevItemOptions($event,'ARCHIVE')"/>
+                                </HBox>
+                            </HBox>
+                            -->
+                        </HBox>
+                    </Panel>
+                    <HBox
+                        justifyContent="Center">
+                        <!-- Development Needs Start-->
+                        <Panel width="550px">
+                            <HBox justifyContent="Start" alignItems="Stretch" alignContent="Center">
+                                <core:Icon src="sap-icon://activity-assigned-to-goal" size="25px" color="#ef5e37" class="sapUiTinyMarginEnd"/>
+                                <Title text="{i18n>devNeedHead}" wrapping="true" titleStyle="H5" class="sapUiTinyMarginTop"/>
+                            </HBox>
+                            <VBox class="sapUiSmallMarginTop">
+                                <Label wrapping="true" text="{PDPlanModel>Need}"></Label>
+                            </VBox>
+                        </Panel>
+                        <!-- Development Needs End-->
+                        <!-- Development Strategy Start -->
+                        <Panel width="550px">
+                            <HBox justifyContent="Start" alignItems="Stretch" alignContent="Center">
+                                <core:Icon src="sap-icon://activities" size="25px" color="#ef5e37" class="sapUiTinyMarginEnd"/>
+                                <Title text="{i18n>devStrategyHead}" wrapping="true" titleStyle="H5" class="sapUiTinyMarginTop"/>
+                            </HBox>
+                            <VBox class="sapUiSmallMarginTop">
+                                <Label wrapping="true" text="{PDPlanModel>Strategy}"></Label>
+                            </VBox>
+                        </Panel>
+                    </HBox>
+                    <!-- Development Strategy End -->
+                    <!-- Action Items and Notes expandable Panel (left/right) -->
+                    <Panel
+                        expandable="true" expanded="true" height="350px" headerText="{i18n>actionItemPanelHead}">
+                        <!-- Left Side (Action Items/Goals) -->
+                        <l:VerticalLayout width="50%">
+                            <List items="{path: 'PDPlanModel>to_goals/results', templateShareable: true}" headerText="{i18n>actionssubHead}">
+                            <FeedListItem showIcon="false" type="Active" sender="Expires { path: 'PDPlanModel>DateDue', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyyMMdd' }, pattern: 'dd/MM/yyyy' } }"
+                                timestamp="{ path: 'PDPlanModel>DateCreated', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyyMMdd' }, pattern: 'dd/MM/yyyy' } }" 
+                                text="{PDPlanModel>ActionItemName} &#10; {PDPlanModel>Description}">
+                                </FeedListItem>
+                            </List>
+                        </l:VerticalLayout>
+                        <!-- Right Side (Notes) -->
+                        <l:VerticalLayout width="50%">
+                            <List items="{path: 'PDPlanModel>to_notes/results', templateShareable: true}" headerText="{i18n>notesSubHead}">
+                            <FeedListItem sender = "({PDPlanModel>ActionItem}) Note" type = "Active" iconDensityAware = "false" showIcon = "false"
+                                timestamp="{ path: 'PDPlanModel>NoteDate', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' }, templateShareable: true }" 
+                                text="{PDPlanModel>Note}">
+                                </FeedListItem>
+                            </List>
+                        </l:VerticalLayout>
+                    </Panel>
+                    <!-- Action Items End -->
+                    <!-- Create Note/ Complete Goal/ Edit Buttons -->
+                    <HBox visible="{=${PDPlanModel>Status} === 'Pending' ? true : false }" alignItems="Center" alignContent="Center" justifyContent="Center" class="sapUiSmallMarginTop">
+                        <Button icon="sap-icon://add-activity" type="Emphasized" class="sapUiTinyMargin" width="250px" text="Create Action Item" press="onCreateDevItem($event,'Action')"/>
+                        <Button text="{i18n>addNoteBTNtxt}" icon="sap-icon://create-form" type="Emphasized" width="250px" press="onNotePost" class="sapUiTinyMargin"/>
+                        <Button visible="{=${PDPlanModel>Status} === 'Completed' ? false : true}" type="Success" class="sapUiTinyMargin" width="250px" text="{i18n>CompleteGoal}" press="onDevItemOptions($event, 'COMPLETE')" enabled="{= ${SettingsModel>/UserRole} === 'Admin' ? true : false}"/>
+                        <Button icon="sap-icon://edit" type="Attention" class="sapUiTinyMargin" width="250px" text="{i18n>Edit}" press="onDevItemOptions($event, 'EDIT_DEVITEM')"/>
+                    </HBox>
+                </VBox>
+            </f:GridListItem>
+        </f:GridList>
+    </VBox>
+</core:FragmentDefinition>

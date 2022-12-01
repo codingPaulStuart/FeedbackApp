@@ -1,0 +1,69 @@
+_schema-version: "3.2"
+ID: AppRouter
+description: App Router for Feedback App
+version: 0.0.1
+modules:
+- name: AppRouter-dest-content
+  type: com.sap.application.content
+  requires:
+  - name: AppRouter-destination-service
+    parameters:
+      content-target: true
+  - name: AppRouter-repo-host
+    parameters:
+      service-key:
+        name: AppRouter-repo-host-key
+  - name: AppRouter-uaa
+    parameters:
+      service-key:
+        name: AppRouter-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: AppRouter_repo_host
+          ServiceInstanceName: AppRouter-html5-srv
+          ServiceKeyName: AppRouter-repo-host-key
+          sap.cloud.service: AppRouter
+        - Authentication: OAuth2UserTokenExchange
+          Name: AppRouter_uaa
+          ServiceInstanceName: AppRouter-xsuaa-srv
+          ServiceKeyName: AppRouter-uaa-key
+          sap.cloud.service: AppRouter
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+resources:
+- name: AppRouter-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json  
+    service: xsuaa
+    service-name: AppRouter-xsuaa-srv
+    service-plan: application
+- name: AppRouter-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+      init_data:
+        instance:
+          existing_destinations_policy: update
+          destinations:
+          - Name: ui5
+            Type: HTTP
+            URL: https://ui5.sap.com
+            ProxyType: Internet
+            Authentication: NoAuthentication
+    service: destination
+    service-name: AppRouter-destination-service
+    service-plan: lite
+- name: AppRouter-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: AppRouter-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo

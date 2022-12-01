@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Popover id="myPopover" title="{SettingsModel>/TileName}" class="sapUiResponsivePadding--header sapUiResponsivePadding--footer" placement="Bottom">
+		<VBox>
+			<Text text="{SettingsModel>/TileArray} "></Text>
+		</VBox>
+	</Popover>
+</core:FragmentDefinition>

@@ -1,0 +1,37 @@
+<mvc:View controllerName="feedbackapp.feedbackapp.controller.Main" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core" displayBlock="true" height="100%">
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page title="{i18n>PageTitle}">
+                    <OverflowToolbar  class="sapUiSmallMargin">
+                        <SearchField width="100%" placeholder="{i18n>searchPlaceHolder}" liveChange="onLoadReviewList" search="onLoadReviewList" showRefreshButton="true" value="{SettingsModel>/MasterSearchQuery}" showSearchButton="true" class="sapUiLargeMarginTopBottom"></SearchField>
+                    </OverflowToolbar>
+                   
+                    <IconTabBar applyContentPadding="true" selectedKey="{SettingsModel>/ReviewsListSelectedKey}" select=".onLoadReviewList" class="sapUiResponsiveContentPadding"> 
+                        <items>
+                            <IconTabFilter icon="sap-icon://idea-wall" design="Horizontal" text="{i18n>goalsTab}" key="PDplans"></IconTabFilter>
+                            <IconTabFilter icon="sap-icon://open-folder" design="Horizontal" text="{=${SettingsModel>/UserRole} === 'Admin' ? ${i18n>Feedback} : ${i18n>MyFeedback} }" key="Feedback"></IconTabFilter>
+                            <IconTabFilter icon="sap-icon://work-history" design="Horizontal" text="{=${SettingsModel>/UserRole} === 'Admin' ? ${i18n>Reviews} : ${i18n>PendingReviews} }" key="Reviews"></IconTabFilter>
+                        </items>
+                        <content>
+                            <!-- Fragment Views -->
+                            <VBox visible="{=${SettingsModel>/ReviewsListSelectedKey} !== 'PDplans' ? true : false}">
+                                <core:Fragment type="XML" fragmentName="feedbackapp.feedbackapp.view.fragments.ReviewList"/>
+                            </VBox>
+                            <VBox visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'PDplans' ? true : false}">
+                                <core:Fragment type="XML" fragmentName="feedbackapp.feedbackapp.view.fragments.EmployeesList"/>
+                            </VBox>
+                        </content>
+                    </IconTabBar>
+                    <!-- Temp Button for switching roles in Development
+                    <HBox class="sapUiLargeMargin" justifyContent="Center" alignItems="Center">
+                        <Button press=".switchMode" text="Switch Modes"></Button>
+                        <Button press=".accessPDPlan" text="PD plan"></Button>
+                        <Text text="{SettingsModel>/UserRole}" class="sapUiTinyMargin"></Text> 
+                    </HBox> 
+                    -->
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>

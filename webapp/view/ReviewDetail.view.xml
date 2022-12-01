@@ -1,0 +1,255 @@
+<mvc:View controllerName="feedbackapp.feedbackapp.controller.ReviewDetail" xmlns:table="sap.ui.table" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:grid="sap.ui.layout.cssgrid" displayBlock="true" height="100%" xmlns:viz="sap.viz.ui5.controls" xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds" xmlns:vizData="sap.viz.ui5.data" xmlns:chart="sap.suite.ui.commons" xmlns:tnt="sap.tnt" xmlns:u="sap.ui.unified">
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page binding="{FeedbackModel>/ReviewDetails}" id="reviewsPageID" enableScrolling="true" title="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? ${i18n>TitleFeedback} : ${i18n>TitleReviews} }" showNavButton="true" navButtonPress="onBack">
+                    <content>
+                        <!--Review Details-->
+                        <VBox visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? true : false}">
+                            <core:Fragment type="XML" fragmentName="feedbackapp.feedbackapp.view.fragments.AnalyticsDisplay"/>
+                        </VBox>
+                        <HBox>
+                            <!-- Panel Section under the VizFrame and Averages Cards, 4 boxes with comments concatendated -->
+                            <!-- Final Summary Comments Feedback -->
+                                <Panel backgroundDesign="Solid" visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? true : false}"> <Title text="{i18n>SummaryComments}"/>
+                                <core:Icon src="sap-icon://form" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                <VBox width="600px">
+                                    <TextArea growing="true" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" width="600px" height="200px" value="{FeedbackModel>SummaryComment}"/>
+                                </VBox>
+                            </Panel>
+                            <!-- Final Comments Feedback -->
+                            <Panel backgroundDesign="Solid" visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? true : false}">
+                                <Title text="{i18n>WhatWorkedWell}"/>
+                                <core:Icon src="sap-icon://sys-enter-2" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                <VBox width="600px">
+                                    <TextArea editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" width="600px" height="200px" growing="true" value="{FeedbackModel>WhatWorkedWell}"/>
+                                </VBox>
+                            </Panel>
+                        </HBox>
+                        <HBox>
+                            <!-- What can Be improved Feedback -->
+                            <Panel backgroundDesign="Solid" visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? true : false}">
+                                <Title text="{i18n>Improvements}"/>
+                                <core:Icon src="sap-icon://line-chart" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                <VBox width="600px">
+                                    <TextArea growing="true" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" width="600px" height="200px" value="{FeedbackModel>Improvements}"/>
+                                </VBox>
+                            </Panel>
+                            <!-- Final Comment and Action to Improve Feedback -->
+                            <Panel backgroundDesign="Solid" visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? true : false}">
+                                <Title text="{i18n>ActionsToImprove}"/>
+                                <core:Icon src="sap-icon://lightbulb" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                <VBox width="600px">
+                                    <TextArea growing="true" editable="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>/ReviewDetails/ReviewState} === 'Pending' ? true : false }" width="600px" height="200px" value="{FeedbackModel>ActionsToImprove}"/>
+                                </VBox>
+                            </Panel>
+                        </HBox>
+                        <!-- Review Form -->
+                        <!-- Think180 Header -->
+                        <Panel visible="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true : false}" backgroundDesign="Solid">
+                            <HBox>
+                                <Image src="https://i.imgur.com/gWFWcla.png" width="300px" class="SapUiLargeMarginTop"/>
+                                <VBox
+                                    class="sapUiMediumMarginBegin ">
+                                    <!-- Employee Name -->
+                                    <HBox>
+                                        <core:Icon src="sap-icon://customer" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="15px"/>
+                                        <Title titleStyle="H6" text="{i18n>graphEmpHead} {SettingsModel>/EmployeeName}"/>
+                                    </HBox>
+                                    <!-- Job Role Title Display in here binding -->
+                                    <HBox>
+                                        <core:Icon src="sap-icon://business-card" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="15px"/>
+                                        <Title visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true : false}" titleStyle="H6" text="{i18n>graphRoleHead} {FeedbackModel>RoleName}"/>
+                                    </HBox>
+                                    <!-- Reviewer Name binding -->
+                                    <HBox>
+                                        <core:Icon src="sap-icon://user-edit" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="15px"/>
+
+                                        <Title visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} !== 'Feedback' ? true : false}" titleStyle="H6" text="{i18n>ReviewedBy} {SettingsModel>/ReviewerName}"/>
+                                    </HBox>
+                                </VBox>
+                                <HBox class="sapUiMediumMarginBegin " width="600px" alignItems="Center">
+                                    <Title titleStyle="H3" text="{i18n>EntryReason}" class="sapUiSmallMarginEnd"></Title>
+                                    <TextArea editable="{= (${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="400px" value="{FeedbackModel>Description}"/>
+                                </HBox>
+                            </HBox>
+
+                        </Panel>
+                        <!--Sliders -->
+                        <!-- Updated Role Descriptors Fixed using Settings Model. -->
+                        <Panel
+                            visible="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true : false}" class="sapUiContentPadding">
+                            <!--Flexbox for first row + includes the ComboBox -->
+                            <FlexBox
+                                justifyContent="Center">
+                                <!--Intuition-->
+                                <VBox alignContent="Center" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://puzzle" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>Intuition}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleIntuition}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>Intuition}" min="1" max="5" step="1"/>
+                                </VBox>
+                            </FlexBox>
+                            <!--Flexbox for Second Row-->
+                            <FlexBox
+                                visible="true" justifyContent="Center">
+                                <!--Documentation-->
+                                <VBox alignContent="Center" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://document-text" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>Documentation}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleDocumentation}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>Documentation}" min="1" max="5" step="1"/>
+                                </VBox>
+                                <!--Communication-->
+                                <VBox alignContent="Center" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://citizen-connect" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>Communication}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleCommunication}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>Communication}" min="1" max="5" step="1"/>
+                                </VBox>
+                                <!--Business Knowledge-->
+                                <VBox alignContent="Center" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://document-text" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>BusinessKnowledge}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleBusinessKnowledge}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>BusinessKnowledge}" min="1" max="5" step="1"/>
+                                </VBox>
+                            </FlexBox>
+                            <FlexBox
+                                visible="true" justifyContent="Center">
+                                <!--Stakeholder-->
+                                <VBox alignContent="SpaceAround" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://meeting-room" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>StakeholderMGMT}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleStakeholderMGMT}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !=='Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>StakeholderMGMT}" min="1" max="5" step="1"/>
+                                </VBox>
+                                <!--User Requirements-->
+                                <VBox alignContent="SpaceAround" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://my-view" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>UserRequirements}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleUserRequirements}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>UserRequirements}" min="1" max="5" step="1"/>
+                                </VBox>
+                                <!--Facilitation-->
+                                <VBox alignContent="SpaceAround" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://idea-wall" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>Facilitation}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleFacilitation}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>Facilitation}" min="1" max="5" step="1"/>
+                                </VBox>
+                            </FlexBox>
+                            <FlexBox
+                                visible="true" justifyContent="Center">
+                                <!--Solution Design-->
+                                <VBox alignContent="SpaceAround" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://popup-window" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>SolutionDesign}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleSolutionDesign}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>SolutionDesign}" min="1" max="5" step="1"/>
+                                </VBox>
+                                <!--Visibility/Performance under Pressure-->
+                                <VBox alignContent="SpaceAround" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://show" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>Visibility}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleVisibility}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>Visibility}" min="1" max="5" step="1"/>
+                                </VBox>
+                                <!--Technical Skills-->
+                                <VBox alignContent="SpaceAround" width="370px" class="sapUiTinyMargin">
+                                    <HBox alignItems="Center">
+                                        <core:Icon src="sap-icon://syntax" class="size1 sapUiTinyMarginEnd" color="#ef5e37" size="25px"/>
+                                        <Title text="{i18n>TechnicalSkills}" wrapping="false"/>
+                                    </HBox>
+                                    <Label text="{FeedbackModel>RoleTechnicalSkills}" wrapping="Soft" width="350px" class="sapUiSmallMarginTop"/>
+                                    <Slider enabled="{=(${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" width="350px" showAdvancedTooltip="true" enableTickmarks="true" value="{FeedbackModel>TechnicalSkills}" min="1" max="5" step="1"/>
+                                </VBox>
+                            </FlexBox>
+                            <HBox class="sapUiMediumMarginTop" justifyContent="Center">
+                                <MessageStrip text="{i18n>RatingsDesc}" type="Warning" showIcon="true" customIcon="sap-icon://employee" class="sapUiMediumMarginBottom"></MessageStrip>
+                            </HBox>
+                        </Panel>
+                        <!-- Review Form: Comments -->
+                        <Panel visible="{= ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true : false}" class="SapUiMarginBottom">
+                            <HBox>
+                                <!--Summary-->
+                                <VBox class="sapUiTinyMargin" width="600px">
+                                    <HBox>
+                                        <Title text="{i18n>SummaryComments}"/>
+                                        <core:Icon src="sap-icon://form" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                    </HBox>
+                                    <form:SimpleForm editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" layout="ResponsiveGridLayout">
+                                        <TextArea valueLiveUpdate="true" editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" placeholder="{i18n>addComments}" height="150px" value="{FeedbackModel>SummaryComment}" liveChange="textInput"></TextArea>
+                                    </form:SimpleForm>
+                                </VBox>
+                                <!--What Worked Well-->
+                                <VBox class="sapUiTinyMargin" width="600px">
+                                    <HBox>
+                                        <Title text="{i18n>WhatWorkedWell}"/>
+                                        <core:Icon src="sap-icon://sys-enter-2" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                    </HBox>
+                                    <form:SimpleForm editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" layout="ResponsiveGridLayout">
+                                        <TextArea valueLiveUpdate="true" editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" placeholder="{i18n>addComments}" height="150px" value="{FeedbackModel>WhatWorkedWell}" change="textInput"></TextArea>
+                                    </form:SimpleForm>
+                                </VBox>
+                            </HBox>
+                            <!--Improvements-->
+                            <HBox>
+                                <VBox class="sapUiTinyMargin" width="600px">
+                                    <HBox>
+                                        <Title text="{i18n>Improvements}"/>
+                                        <core:Icon src="sap-icon://line-chart" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                    </HBox>
+                                    <form:SimpleForm editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" layout="ResponsiveGridLayout">
+                                        <TextArea valueLiveUpdate="true" editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" placeholder="{i18n>addComments}" value="{FeedbackModel>Improvements}" height="150px"></TextArea>
+                                    </form:SimpleForm>
+                                </VBox>
+                                <!--Actions to Improve-->
+                                <VBox class="sapUiTinyMargin" width="600px">
+                                    <HBox>
+                                        <Title text="{i18n>ActionsToImprove}"/>
+                                        <core:Icon src="sap-icon://lightbulb" class="sapUiTinyMarginBegin" color="#ef5e37"/>
+                                    </HBox>
+                                    <form:SimpleForm editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" layout="ResponsiveGridLayout">
+                                        <TextArea valueLiveUpdate="true" editable="{= (${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} !== 'Completed') ? true : false}" placeholder="{i18n>addComments}" value="{FeedbackModel>ActionsToImprove}" height="150px"></TextArea>
+                                    </form:SimpleForm>
+                                </VBox>
+                            </HBox>
+                        </Panel>
+                        <!-- Change/Update Role, Instantiate Fragment, for Edits go to RoleDefinition.fragment -->
+                        <Panel expandable="true" expanded="false" headerText="{i18n>roleAdminPanelHead}" visible="{= ${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? true : false}">
+                            <VBox>
+                                <core:Fragment type="XML" fragmentName="feedbackapp.feedbackapp.view.fragments.RoleDefinition"/>
+                            </VBox>
+                        </Panel>
+                        <!-- Review Form: Buttons -->
+                    </content>
+                    <footer>
+                        <OverflowToolbar >
+                            <ToolbarSpacer/>
+                                <Button type="Emphasized" text="{=${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending' ? ${i18n>SubmitReview} : ${SettingsModel>/UserRole} !== 'Admin' ? ${i18n>AcceptFeedbackSummary} : ${FeedbackModel>ReviewState} === 'Completed' ? ${i18n>ReEnablePending} : ${i18n>ApproveFeedbackSummary} }" visible="{=(${FeedbackModel>ReviewState} === 'Pending' &amp;&amp; ${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews') ||(${SettingsModel>/ReviewsListSelectedKey} === Feedback &amp;&amp; ${SettingsModel>/UserRole} !== 'Admin' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending') || (${SettingsModel>/UserRole} === 'Admin' &amp;&amp;${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' &amp;&amp; ${FeedbackModel>ReviewState} === 'Pending') || (${SettingsModel>/UserRole} === 'Admin' &amp;&amp;${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' &amp;&amp; ${FeedbackModel>ReviewState} === 'Completed') ? true : false}" class="sapUiTinyMargin" press=".onReviewOptions" icon="sap-icon://complete" width="200px"/>
+                        </OverflowToolbar>
+                    </footer>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>

@@ -1,0 +1,121 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core"
+	displayBlock="true" height="100%"> 
+	<Table inset="false" showSeparators="Inner"  items="{PDPlanModel>/PDplansList}">
+		<!-- ************************************ Cell Row Headers ************************************ -->
+        <headerToolbar>
+            <OverflowToolbar>
+             <Title  text="Performance Development Plans"></Title>
+             <ToolbarSpacer/>
+                 <Button visible="{=${SettingsModel>/UserRole} === 'Admin' ? true : false}" type="Transparent" text="Create Blank Performance Development Plan" class="sapUiTinyMargin" icon="sap-icon://create-form"
+            press="onCreatePDPlan($event, 'CREATE')"/>
+            </OverflowToolbar>
+        </headerToolbar>
+		<columns>
+			<!-- Employee Name Head -->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center" width="200px">
+				<HBox justifyContent="Center">
+					<Text text="{i18n>pdListEmpNameHead}"/>
+					<core:Icon src="sap-icon://work-history" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+				</HBox>
+			</Column>
+				<!-- Status-->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+				<HBox justifyContent="Center">
+					<core:Icon src="sap-icon://check-availability" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+					<Text text="Sig. Status"/>
+				</HBox>
+			</Column>
+			<!-- Date Plan Agreed Head -->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+				<HBox justifyContent="Center">
+					<Text text="{i18n>DatePlanAgreed}"/>
+					<core:Icon src="sap-icon://accelerated" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+				</HBox>
+			</Column>
+			<!-- Date of 3 month Review Head -->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+				<HBox justifyContent="Center">
+					<Text text="{i18n>pdListDateReviewHead}"/>
+					<core:Icon src="sap-icon://activity-assigned-to-goal" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+				</HBox>
+			</Column>
+			<!-- Date of 12 month Review Head -->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+				<HBox justifyContent="Center">
+					<Text text="{i18n>pdListDateReviewLTHead}"/>
+					<core:Icon src="sap-icon://target-group" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+				</HBox>
+			</Column>
+			<!-- Date Complete -->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+				<HBox justifyContent="Center">
+					<core:Icon src="sap-icon://check-availability" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+					<Text text="Date Completed"/>
+				</HBox>
+			</Column>
+			<!-- PD Plan ID -->
+			<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+				<HBox justifyContent="Center">
+					<core:Icon src="sap-icon://check-availability" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+					<Text text="PD Plan ID"/>
+				</HBox>
+			</Column>
+		</columns>
+		<!-- ************************************ Cell Row Data ************************************ -->
+		<items>
+			<ColumnListItem visible="true" type="Navigation" press="onselectPDplanListItem">
+				<!-- Employee Name Cells -->
+				<cells width="200px">
+					<HBox justifyContent="Center">
+						<!--<Text text="{PDPlanModel>EmployeeID}"></Text>-->
+						<Select class="sapUiTinyMarginBegin" width="180px" enabled="false" selectedKey="{PDPlanModel>EmployeeName}"
+							items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+							<core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+						</Select>
+					</HBox>
+				</cells>
+					<!-- Status -->
+				<cells >
+					<HBox justifyContent="Center">
+						<Text
+							text="{PDPlanModel>Status}"></Text>
+					</HBox>
+				</cells>
+				<!-- Date Plan Agreed Cells -->
+				<cells >
+					<HBox justifyContent="Center">
+						<Text text="{ path: 'PDPlanModel>DateAgreed', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"></Text>
+					</HBox>
+				</cells>
+				<!-- Short Term Review Date Cells -->
+				<cells >
+					<HBox justifyContent="Center">
+						<Text
+							text="{ path: 'PDPlanModel>DateShortTerm', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"></Text>
+					</HBox>
+				</cells>
+				<!-- Long Term Review Date Cells -->
+				<cells >
+					<HBox justifyContent="Center">
+						<Text
+							text="{ path: 'PDPlanModel>DateLongTerm', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"></Text>
+					</HBox>
+				</cells>
+				<!-- Date Complete Cells -->
+				<cells>
+					<HBox justifyContent="Center">
+						<Text
+							text="{ path: 'PDPlanModel>ManagerAcceptDate', type: 'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss.SSSZ' }, pattern: 'dd/MM/yyyy' } }"></Text>
+					</HBox>
+				</cells>
+				<!-- PD Plan ID -->
+				<cells>
+					<HBox justifyContent="Center">
+						<Text text="{PDPlanModel>PDplanID}"></Text>
+					</HBox>
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+    
+</core:FragmentDefinition>

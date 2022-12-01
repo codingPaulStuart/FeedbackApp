@@ -1,0 +1,71 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog
+        class="sapUiLargeMarginBegin sapUiLargeMarginBottom" id="createNewEntryDialog" icon="sap-icon://feedback" title="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? ${i18n>createFeedbackReport} : ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? ${i18n>AssignNewReview} : 'Create a New Development Item' }">
+        <!--Create a new Feedback Report/Review Start -->
+        <Panel visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' || ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true : false}">
+            <VBox class="sapUiResponsiveMargin">
+                <Label text="{i18n>EntryContext}" class="sapUiMediumMarginBegin"></Label>
+                <TextArea placeholder="{i18n>createNewDialogPlace}" class="sapUiResponsiveMargin" width="400px" height="150px" growing="true" value="{FeedbackModel>/NewReview/Description}"/>
+            </VBox>
+            <VBox class="sapUiResponsiveMargin">
+                <Label class="sapUiMediumMarginBegin sapUiTinyMarginBottom" text="{=${SettingsModel>/ReviewsListSelectedKey} === 'Feedback' ? ${i18n>WhoIsThisForFeedback} : ${i18n>WhoIsTheEmployee}}"></Label>
+                <Select class="sapUiMediumMarginBegin" width="400px" selectedKey="{FeedbackModel>/NewReview/EmployeeName}" items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                    <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                </Select>
+            </VBox>
+            <VBox class="sapUiResponsiveMargin">
+                <Label class="sapUiMediumMarginBegin sapUiTinyMarginBottom" text="{i18n>WhoIsTheManager} {FeedbackModel>/NewReview/EmployeeName}?"></Label>
+                <Select class="sapUiMediumMarginBegin" width="400px" selectedKey="{FeedbackModel>/NewReview/ManagerName}" items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                    <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                </Select>
+            </VBox>
+            <VBox visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Reviews'}" class="sapUiResponsiveMargin">
+                <Label class="sapUiMediumMarginBegin sapUiTinyMarginBottom" text="{i18n>WhoIsTheReviewer}"></Label>
+                <Select class="sapUiMediumMarginBegin" width="400px" selectedKey="{FeedbackModel>/NewReview/ReviewerName}" items="{ path: 'EmployeeNamesModel>/Employee', templateShareable:false, sorter: { path: 'Displayname' } }">
+                    <core:Item key="{EmployeeNamesModel>Displayname}" text="{EmployeeNamesModel>Displayname}"/>
+                </Select>
+            </VBox>
+            <VBox class="sapUiMediumMarginBegin" visible="{=${SettingsModel>/UserRole} === 'Admin' &amp;&amp; ${SettingsModel>/ReviewsListSelectedKey} === 'Reviews' ? true : false }">
+                <Label class="sapUiMediumMarginBegin" text="{i18n>WhenDue}"></Label>
+                <DatePicker class="sapUiMediumMarginBegin" required="true" placeholder="select a date" width="400px" displayFormat="short" valueFormat="yyyyMMdd" value="{ path: 'FeedbackModel>/NewReview/DateDue', formatOptions: { pattern: 'yyyyMMdd' } }"></DatePicker>
+            </VBox>
+        </Panel>
+        <!--Create a new Feedback Report/Review End -->
+        <!-- Create A new goal/development item Start-->
+        <Panel visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'PDdevItems' ? true : false}">
+            <VBox>
+                <Title text="What is the development need? " wrapping="true" titleStyle="H4"/>
+                <TextArea width="1000px" height="100px" editable="true" value="{PDPlanModel>/NewItem/Need}"></TextArea>
+                <Title text="What is the development strategy? " wrapping="true" titleStyle="H4"/>
+                <TextArea width="1000px" height="100px" editable="true" value="{PDPlanModel>/NewItem/Strategy}"></TextArea>
+                <Title text="Duration for this Development Item? " wrapping="true" titleStyle="H4"/>
+                <Select items="{path: 'FeedbackModel>/GoalTypes'}" selectedKey="{PDPlanModel>/NewItem/LengthType}" width="250px" enabled="{= ${SettingsModel>/UserRole} === 'Admin' ? true : false}">
+                    <core:ListItem key="{FeedbackModel>Type}" text="{FeedbackModel>Type}" icon="{FeedbackModel>Icon}"/>
+                </Select>
+            </VBox>
+        </Panel>
+        <!-- Create A new goal/development item End-->
+        <!-- Create a new Action Item Start -->
+        <Panel visible="{=${SettingsModel>/ReviewsListSelectedKey} === 'Action' ? true : false}">
+            <VBox>
+                <Title text="Name of the Action Item " wrapping="true" titleStyle="H4"/>
+                <TextArea width="1000px" height="100px" editable="true" value="{PDPlanModel>/NewItem/ActionItemName}"></TextArea>
+                <Title text="Description of Action Item" wrapping="true" titleStyle="H4"/>
+                <TextArea width="1000px" height="100px" editable="true" value="{PDPlanModel>/NewItem/Description}"></TextArea>
+                <Title text="Duration for this Action item? " wrapping="true" titleStyle="H4"/>
+                <Select items="{path: 'FeedbackModel>/GoalTypes'}" selectedKey="{PDPlanModel>/NewItem/LengthType}" width="250px" enabled="{= ${SettingsModel>/UserRole} === 'Admin' ? true : false}">
+                    <core:ListItem key="{FeedbackModel>Type}" text="{FeedbackModel>Type}" icon="{FeedbackModel>Icon}"/>
+                </Select>
+                <Title text="{i18n>WhenDue}" titleStyle="H4"></Title>
+                <DatePicker class="sapUiMediumSmallBegin" required="true" placeholder="select a date" width="400px" displayFormat="short" valueFormat="yyyyMMdd" value="{ path: 'PDPlanModel>/NewItem/DateDue', formatOptions: { pattern: 'yyyyMMdd' } }"></DatePicker>
+            </VBox>
+        </Panel>
+        <!--Create a new Action Item End-->
+        <!-- Buttons -->
+        <HBox class="sapUiSmallMarginTopBottom" justifyContent="Center">
+            <Button visible="{=${SettingsModel>/IsEditingGoal} === true ? true: false}" type="Emphasized" text="Update" width="150px" class="sapUiTinyMargin" press=".onDialogButtonsCreateItems($event, 'EDIT')"/>
+            <Button visible="{=${SettingsModel>/IsEditingGoal} === false ? true: false}" type="Emphasized" text="{i18n>Create}" width="150px" class="sapUiTinyMargin" press=".onDialogButtonsCreateItems($event, 'CREATE')"/>
+            <Button type="Reject" text="{i18n>cancelRemoveFBbtn}" width="150px" class="sapUiTinyMargin" press="onDialogButtonsCreateItems($event, 'CANCEL')"/>
+        </HBox>
+    </Dialog>
+</core:FragmentDefinition>

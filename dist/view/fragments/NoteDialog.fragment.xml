@@ -1,0 +1,32 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" 
+    xmlns:table="sap.ui.table" xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:grid="sap.ui.layout.cssgrid" 
+    displayBlock="true" height="100%" xmlns:viz="sap.viz.ui5.controls" xmlns:vizFeeds="sap.viz.ui5.controls.common.feeds" xmlns:vizData="sap.viz.ui5.data" xmlns:chart="sap.suite.ui.commons" xmlns:u="sap.ui.unified">
+    <Dialog title="{i18n>noteDialogFragHead}" icon="sap-icon://notes" draggable="true" binding="{PDPlanModel>/NewNote}">
+        <VBox
+            class="sapUiSmallMarginTop sapUiLargeMarginBegin" justifyContent="Center" alignItems="Start" width="650px">
+            <!-- Goal/Action Item Drop Down -->
+            <HBox class="sapuiSmallMarginTop">
+                <Label text="{i18n>noteDialogGoalItemmHead}"/>
+                <core:Icon src="sap-icon://task" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+            </HBox>
+            <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                <Select width="600px" selectedKey="{PDPlanModel>GoalSettingID}" items="{PDPlanModel>/ChooseActionList}" 
+                    change="onActionChosen" valueState="Warning" >
+                    <core:ListItem key="{PDPlanModel>GoalSettingID}" text="{PDPlanModel>ActionItemName} | {PDPlanModel>Description}" icon="sap-icon://sys-enter-2"/>
+                </Select>
+            </HBox>
+            <!-- Text Field for Note Entry -->
+            <HBox>
+                <Label text="{i18n>newNoteDialogsubHead}"/>
+                <core:Icon src="sap-icon://paper-plane" color="#ef5e37" class="sapUiTinyMarginBegin"/>
+            </HBox>
+            <TextArea width="600px" wrapping="Hard" growing="true" placeholder="{i18n>noteDialogPlace}" value="{PDPlanModel>Note}"/>
+        </VBox>
+        <VBox alignItems="End" width="670px">
+            <HBox class="sapUiSmallMargin">
+                <Button class="sapUiTinyMargin" text="{i18n>createNoteDiaFragBtnTXT}" icon="sap-icon://paper-plane" type="Success" press="onSaveNote"/>
+                <Button class="sapUiTinyMargin" text="{i18n>cancelNoteDiaFragBTNTxt}" icon="sap-icon://decline" type="Critical" press="onNoteDialogCancel"/>
+            </HBox>
+        </VBox>
+    </Dialog>
+</core:FragmentDefinition>
